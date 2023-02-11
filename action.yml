@@ -1,6 +1,6 @@
 # action.yml
-name: 'Test Docker Action'
-description: 'Example github action'
+name: 'Pytest-coverage-commenter'
+description: 'Github action to add coverage report as comment'
 inputs:
   service-name:
     description: 'Name of service'
@@ -9,8 +9,7 @@ inputs:
   service-directory:
     description: 'Path of folder of service'
     required: false
-    default: './'
-  
+    default: './'  
 outputs:
   time:
     description: 'The time of coverage comment creation'
