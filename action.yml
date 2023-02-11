@@ -13,9 +13,6 @@ inputs:
   github-token:
     description: 'Github token for authentication'
     required: true
-outputs:
-  time:
-    description: 'The time of coverage comment creation'
 runs:
   using: 'docker'
   image: 'Dockerfile'
