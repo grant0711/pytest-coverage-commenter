@@ -9,7 +9,10 @@ inputs:
   service-directory:
     description: 'Path of folder of service'
     required: false
-    default: './'  
+    default: './'
+  github-token:
+    description: 'Github token for authentication'
+    required: true
 outputs:
   time:
     description: 'The time of coverage comment creation'
@@ -19,3 +22,4 @@ runs:
   args:
     - ${{ inputs.service-name }}
     - ${{ inputs.service-directory }}
+    - ${{ inputs.github-token }}
