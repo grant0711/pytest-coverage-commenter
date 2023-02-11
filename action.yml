@@ -1,0 +1,22 @@
+# action.yml
+name: 'Test Docker Action'
+description: 'Example github action'
+inputs:
+  service-name:
+    description: 'Name of service'
+    required: true
+    default: ''
+  service-directory:
+    description: 'Path of folder of service'
+    required: false
+    default: './'
+  
+outputs:
+  time:
+    description: 'The time of coverage comment creation'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.service-name }}
+    - ${{ inputs.service-directory }}
