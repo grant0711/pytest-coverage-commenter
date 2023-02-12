@@ -6,10 +6,9 @@ inputs:
     description: 'Name of service'
     required: true
     default: ''
-  service-directory:
-    description: 'Path of folder of service'
-    required: false
-    default: './'
+  coverage-report:
+    description: 'Output of coverage report run'
+    required: true
   github-token:
     description: 'Github token for authentication'
     required: true
@@ -18,5 +17,5 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.service-name }}
-    - ${{ inputs.service-directory }}
+    - ${{ inputs.coverage-report }}
     - ${{ inputs.github-token }}
