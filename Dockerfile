@@ -37,7 +37,7 @@ FROM python:3.11-alpine as builder
 ADD . /app
 WORKDIR /app
 #ADD main.py /main.py
-#COPY --from=builder /app /app
+COPY --from=builder /app /app
 ENV PYTHONPATH /app
 RUN ls -a
 
