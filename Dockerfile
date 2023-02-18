@@ -5,7 +5,7 @@ FROM base as builder
 RUN mkdir /install
 WORKDIR /install
 
-#RUN apk add --no-cache \
+RUN apk add --no-cache python3 py3-pip
 #      gcc \
 #      libffi-dev \
 #      linux-headers \
