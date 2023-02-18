@@ -16,6 +16,10 @@ inputs:
     description: 'Owner/name of github repo'
     required: false
     default: ${{ github.repository }}
+  github-issue:
+    description: 'Pull request issue number'
+    required: false
+    default ${{ github.event.pull_request.number }}
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -24,3 +28,4 @@ runs:
     - ${{ inputs.coverage-report }}
     - ${{ inputs.github-token }}
     - ${{ inputs.github-repo }}
+    - ${{ inputs.github-issue }}
