@@ -5,5 +5,5 @@ WORKDIR /app
 RUN pip install --target=/app requests
 
 ENV PYTHONPATH /app
-#ENTRYPOINT [ "python main.py" ]
-CMD ["/app/main.py"]
+ENTRYPOINT [ "python main.py" ]
+#CMD ["/app/main.py"]
