@@ -1,8 +1,9 @@
 import sys
 
-#import requests
+import requests
 
 if __name__=="__main__":
+    print('hello')
     print(sys.argv)
 
 
