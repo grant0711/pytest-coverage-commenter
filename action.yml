@@ -12,6 +12,10 @@ inputs:
   github-token:
     description: 'Github token for authentication'
     required: true
+  github-repo:
+    description: 'Owner/name of github repo'
+    required: false
+    default: ${{ github.repository }}
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -19,4 +23,4 @@ runs:
     - ${{ inputs.service-name }}
     - ${{ inputs.coverage-report }}
     - ${{ inputs.github-token }}
-    - ${{ github.repository }}
+    - ${{ inputs.github-repo }}
