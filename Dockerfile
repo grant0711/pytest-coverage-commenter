@@ -40,7 +40,7 @@ WORKDIR /app
 #COPY --from=builder /app /app
 #ENV PYTHONPATH /app
 #CMD ["/app/main.py"]
-ENTRYPOINT [ "python app/main.py" ]
+ENTRYPOINT [ "python /app/main.py" ]
 
 #COPY . /app
 #RUN chmod +x /app/coverage_commenter/entrypoint.sh
