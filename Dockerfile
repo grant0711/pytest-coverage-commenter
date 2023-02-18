@@ -36,8 +36,8 @@ FROM python:3.11-alpine
 
 ADD main.py /main.py
 ENV PYTHONPATH /
-CMD ["main.py"]
-ENTRYPOINT [ "python" ]
+#CMD ["main.py"]
+ENTRYPOINT [ "python main.py" ]
 
 #COPY . /app
 #RUN chmod +x /app/coverage_commenter/entrypoint.sh
