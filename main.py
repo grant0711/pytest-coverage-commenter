@@ -1,11 +1,11 @@
 import sys
 
-import requests
+#import requests
 
 if __name__=="__main__":
     print(sys.argv)
 
-    
+
 # Where to find a comment:
 # GET
 # https://api.github.com/repos/{owner}/{repo}/issues/{pull number}/comments

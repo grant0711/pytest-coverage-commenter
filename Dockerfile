@@ -34,7 +34,8 @@ FROM python:3.11-alpine
 #COPY . /app/coverage_commenter
 #WORKDIR /app
 
-ADD main.py /
+ADD main.py /main.py
+ENV PYTHONPATH /
 CMD ["main.py"]
 ENTRYPOINT [ "python" ]
 
