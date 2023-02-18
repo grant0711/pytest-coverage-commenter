@@ -7,6 +7,9 @@
 pwd
 ls -a
 
+cd github/workspace
+ls -a
+
 
 python main.py $1 $2 $3
 
