@@ -35,7 +35,7 @@ FROM python:3.11-alpine as builder
 #COPY . /app/coverage_commenter
 #WORKDIR /app
 ADD . /app
-WORKDIR /app
+#WORKDIR /app
 #ADD main.py /main.py
 #COPY --from=builder /app /app
 #ENV PYTHONPATH /app
