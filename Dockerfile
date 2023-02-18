@@ -1,15 +1,15 @@
-FROM alpine:3.11 as base
+FROM python:3.11-alpine as base
 
 FROM base as builder
 
 RUN mkdir /install
 WORKDIR /install
 
-RUN apk add --no-cache \ 
-      gcc \
-      libffi-dev \
-      linux-headers \
-      musl-dev
+#RUN apk add --no-cache \ 
+#      gcc \
+#      libffi-dev \
+#      linux-headers \
+#      musl-dev
 #      postgresql-client
 
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -32,8 +32,7 @@ COPY --from=venv /.venv /.venv
 ENV PATH="/.venv/bin:$PATH"
 
 COPY . /app
-WORKDIR /app
-
+#WORKDIR /app
 
 #COPY . /app
 RUN chmod +x /app/entrypoint.sh
