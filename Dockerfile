@@ -32,7 +32,7 @@ COPY --from=venv /.venv /.venv
 ENV PATH="/.venv/bin:$PATH"
 
 COPY . /app
-#WORKDIR /app
+WORKDIR /app
 
 #COPY . /app
 RUN chmod +x /app/entrypoint.sh
