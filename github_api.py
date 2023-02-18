@@ -23,16 +23,14 @@
 # payload = {"body": "desired new comment body"}
 import requests
 
-def get_headers(github_token):
-    return {
-        'Authorization': f'Bearer {github_token}',
-        'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28'
-    }
 
 def github_session(github_token):
     s = requests.Session()
-    s.headers.update(get_headers(github_token))
+    s.headers.update({
+        'Authorization': f'Bearer {github_token}',
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+    })
     return s
 
 def get_comment(service_name, github_repo, github_token, github_issue_number, session=None):
@@ -41,7 +39,9 @@ def get_comment(service_name, github_repo, github_token, github_issue_number, se
             url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments"
         )
         print(response)
-        print(response.data)
+        print(dir(response))
+        response_json = response.json()
+        print(response_json)
         return response
 
 def create_comment(service_name, github_repo, github_token, github_issue_number, coverage_report, session=None):
