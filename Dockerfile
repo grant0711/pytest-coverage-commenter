@@ -31,10 +31,10 @@ FROM python:3.11-alpine
 #COPY --from=venv /.venv /.venv
 #ENV PATH="/.venv/bin:$PATH"
 
-COPY . .
+COPY . /app/coverage_commenter
 #WORKDIR /app
 
 #COPY . /app
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+RUN chmod +x /app/coverage_commenter/entrypoint.sh
+ENTRYPOINT ["/app/coverage_commenter/entrypoint.sh"]
 
