@@ -38,7 +38,7 @@ ADD . /app
 WORKDIR /app
 #ADD main.py /main.py
 #COPY --from=builder /app /app
-#ENV PYTHONPATH /app
+ENV PYTHONPATH /app
 #CMD ["/app/main.py"]
 ENTRYPOINT [ "python main.py" ]
 
