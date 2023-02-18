@@ -37,11 +37,11 @@ on:
   pull_request:
     branches: [ "**" ]
     paths:
-      - "path/to/my/service/**"
+      - "path/to/your/service/**"
   push:
     branches: [ "main" ]
     paths:
-      - "path/to/my/service/**"
+      - "path/to/your/service/**"
 
 jobs:
   build:
