@@ -1,5 +1,6 @@
-FROM python:3.11-alpine
-
+FROM python:3.11-alpine as builder
+ADD . /app
+WORKDIR /app
 #FROM base as builder
 
 #RUN mkdir /install
@@ -33,9 +34,10 @@ FROM python:3.11-alpine
 
 #COPY . /app/coverage_commenter
 #WORKDIR /app
-COPY . /app
-WORKDIR /app
+#ADD . /app
+#WORKDIR /app
 #ADD main.py /main.py
+COPY --from=builder /app /app
 ENV PYTHONPATH /app
 CMD ["/app/main.py"]
 #ENTRYPOINT [ "python main.py" ]
