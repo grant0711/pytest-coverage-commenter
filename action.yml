@@ -11,8 +11,7 @@ inputs:
     required: true
   github-token:
     description: 'Github token for authentication'
-    required: false
-    default: ${{ secrets.GITHUB_TOKEN }}
+    required: true
   github-owner:
     description: 'Owner of github repo'
     required: false
