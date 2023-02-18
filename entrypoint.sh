@@ -7,7 +7,7 @@
 pwd
 ls -a
 
-cd github/workspace
+cd /github/workspace
 ls -a
 
 
