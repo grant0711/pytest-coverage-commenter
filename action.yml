@@ -3,7 +3,7 @@ name: 'Pytest-coverage-commenter'
 description: 'Github action to add coverage report as comment'
 inputs:
   service-name:
-    description: 'Name of service'
+    description: 'Name of service; used within Title of Coverage Comment'
     required: true
     default: ''
   coverage-report:
