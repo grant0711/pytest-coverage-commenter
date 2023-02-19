@@ -28,7 +28,7 @@ def main(service_name, coverage_report, github_token, github_repo, github_issue_
 
     # If found, update the existing one
     else:
-        update_comment(service_name, github_repo, github_token, github_issue_number, coverage_report)
+        update_comment(service_name, github_repo, github_token, comment_id, coverage_report)
 
 
 if __name__=="__main__":
