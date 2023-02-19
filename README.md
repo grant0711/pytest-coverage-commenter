@@ -6,19 +6,19 @@ Pytest-coverage-commenter adds a detailed coverage comment to pull requests. Thi
 
 ## Required input arguments:
 
-## `service-name`
+### `service-name`
 
 Name of service that is being tested with coverage. This is utilized within the comment and utilized on subsequent workflow runs to find and update the existing comment instead of creating a new one. If omitted, will default to an empty string.
 
-## `github-token`
+### `github-token`
 
 Github token utilized for authentication. You should pass in secrets.GITHUB_TOKEN. This will already be available within your repository secrets.
 
-## `github-repo`
+### `github-repo`
 
 The owner/name of your github repository. This will default to the current repository context, so defining a value for this field is not required.
 
-## `github-issue`
+### `github-issue`
 
 The issue number of the pull request. This will default to the current pull request context, so defining a value for this field is not required.
 
@@ -27,8 +27,9 @@ The issue number of the pull request. This will default to the current pull requ
 
 If utilizing within a python monorepo, you may create a github action workflow yaml file for each specific service (i.e. directory). At the top of your yaml file, you can specify the specific paths with which to run the coverage commenter.
 
-See the example below for an example github actions yaml file. This assumes you have a directory structure as follows:
+### Assuming you have a directory structure as follows:
 
+```
 project
   .github
     workflows
@@ -37,7 +38,9 @@ project
   services
     api
     portal
+```
 
+### Here is an example api.yaml file:
 
 ```
 name: API service workflow
