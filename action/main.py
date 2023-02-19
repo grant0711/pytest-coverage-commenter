@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 
-from github_api import (
+from .github_api import (
     get_comment,
     create_comment,
     update_comment
