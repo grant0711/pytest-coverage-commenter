@@ -26,7 +26,7 @@ def github_session(github_token):
     return s
 
 
-def get_comment(service_name, github_repo, github_token, github_issue_number):
+def get_comment(service_name, github_repo, github_issue_number, session):
     """
     Description:
         - Gets up to 30 comments from an issue, iterates through each comment to identify
@@ -35,7 +35,6 @@ def get_comment(service_name, github_repo, github_token, github_issue_number):
     Inputs:
         - service_name: str name of service used to identify the coverage comment
         - github_repo: str format 'owner/repo' of the repository
-        - github_token: str github token for authentication
         - github_issue_number: int github issue number
 
     Outputs:
@@ -44,21 +43,20 @@ def get_comment(service_name, github_repo, github_token, github_issue_number):
     Reference:
     https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#list-issue-comments
     """
-    with github_session(github_token) as s:
-        response = s.get(
-            url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments"
-        )
-        if response.status_code != 200:
-            raise Exception(f"Failed to get comment: {response.json()}; status_code: {response.status_code}")
-        response_json = response.json()
-        for comment in response_json:
-            if comment.get('body', '').startswith(service_name + ' Coverage Report') and \
-                comment.get('user', {}).get('login') == 'github-actions[bot]':
-                return comment['id']
-        return None
+    response = session.get(
+        url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments"
+    )
+    if response.status_code != 200:
+        raise Exception(f"Failed to get comment: {response.json()}; status_code: {response.status_code}")
+    response_json = response.json()
+    for comment in response_json:
+        if comment.get('body', '').startswith('# ' + service_name + ' Coverage Report') and \
+            comment.get('user', {}).get('login') == 'github-actions[bot]':
+            return comment['id']
+    return None
 
 
-def create_comment(service_name, github_repo, github_token, github_issue_number, coverage_report):
+def create_comment(service_name, github_repo, github_issue_number, coverage_report, session):
     """
     Description:
         - Creates a new coverage comment on an issue
@@ -66,7 +64,6 @@ def create_comment(service_name, github_repo, github_token, github_issue_number,
     Inputs:
         - service_name: str name of service used to identify the coverage comment
         - github_repo: str format 'owner/repo' of the repository
-        - github_token: str github token for authentication
         - github_issue_number: int github issue number
         - coverage_report: str formatted coverage report to utilize as body of comment
 
@@ -78,20 +75,19 @@ def create_comment(service_name, github_repo, github_token, github_issue_number,
     Reference:
     https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#create-an-issue-comment
     """
-    with github_session(github_token) as s:
-        s.headers.update({'Content-Type': 'application/json'})
-        response = s.post(
-            url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments",
-            data=json.dumps({
-                "body": service_name + " Coverage Report" + "\n\n" + coverage_report
-            })
-        )
-        if response.status_code != 200:
-            raise Exception(f"Failed to create comment: {response.json()}; status_code: {response.status_code}")
+    session.headers.update({'Content-Type': 'application/json'})
+    response = session.post(
+        url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments",
+        data=json.dumps({
+            "body": titled_coverage_report(service_name, coverage_report)
+        })
+    )
+    if response.status_code != 200:
+        raise Exception(f"Failed to create comment: {response.json()}; status_code: {response.status_code}")
     return
 
 
-def update_comment(service_name, github_repo, github_token, comment_id, coverage_report):
+def update_comment(service_name, github_repo, comment_id, coverage_report, session):
     """
     Description:
         - Updates an existing coverage comment on an issue
@@ -99,7 +95,6 @@ def update_comment(service_name, github_repo, github_token, comment_id, coverage
     Inputs:
         - service_name: str name of service used to identify the coverage comment
         - github_repo: str format 'owner/repo' of the repository
-        - github_token: str github token for authentication
         - comment_id: int github comment id of existing coverage comment
         - coverage_report: str formatted coverage report to utilize as body of comment
 
@@ -111,38 +106,87 @@ def update_comment(service_name, github_repo, github_token, comment_id, coverage
     Reference:
     https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#update-an-issue-comment
     """
-    with github_session(github_token) as s:
-        s.headers.update({'Content-Type': 'application/json'})
-        response = s.patch(
-            url=f"https://api.github.com/repos/{github_repo}/issues/comments/{comment_id}",
-            data=json.dumps({
-                "body": service_name + " Coverage Report" + "\n\n" + coverage_report
-            })
-        )
-        if response.status_code != 200:
-            raise Exception(f"Failed to update comment: {response.json()}; status_code: {response.status_code}")
+    session.headers.update({'Content-Type': 'application/json'})
+    response = session.patch(
+        url=f"https://api.github.com/repos/{github_repo}/issues/comments/{comment_id}",
+        data=json.dumps({
+            "body": titled_coverage_report(service_name, coverage_report)
+        })
+    )
+    if response.status_code != 200:
+        raise Exception(f"Failed to update comment: {response.json()}; status_code: {response.status_code}")
     return
 
 
-def format_coverage_report(r):
-    return r
+def strip_line(v):
+    return v != '----------------------------------------'
 
-def main(service_name, coverage_report, github_token, github_repo, github_issue_number):
+
+def format_coverage_report(r):
+    """
+    Description:
+        - Takes as input the coverage report and transforms into a more user-friendly format for
+          the coverage comment body
+
+    Inputs:
+        - r: str coverage report
+    Outputs:
+        - str formatted coverage report with only 'Name' and 'Cover' columns and newlines
+    """
+    elements = r.split()
+    elements = list(filter(strip_line, elements))
+    array = []
+    while len(elements) > 0:
+        row = []
+        for i in range(4):
+            if i in [0, 3]: # Keep the 'Name' and 'Cover' columns
+                row.append(elements.pop(0))
+            else: # Pop off the 'Stmts' and 'Miss' columns
+                elements.pop(0)
+        concatenated_row = '    '.join(row)
+        if concatenated_row.startswith('TOTAL') or \
+            concatenated_row == 'Name    Cover':
+            concatenated_row = '## ' + concatenated_row
+        array.append(concatenated_row)
+    return '\n'.join(array)
+
+
+def titled_coverage_report(service_name, coverage_report):
+    return "# " + service_name + " Coverage Report" + "\n\n" + coverage_report
+
+
+def main(service_name, coverage_report, github_repo, github_issue_number, session):
     if github_issue_number == '0':
         return
     coverage_report = format_coverage_report(coverage_report)
-    comment_id = get_comment(service_name, github_repo, github_token, github_issue_number)
+    comment_id = get_comment(
+        service_name=service_name,
+        github_repo=github_repo,
+        github_issue_number=github_issue_number,
+        session=session)
     if not comment_id:
-        create_comment(service_name, github_repo, github_token, github_issue_number, coverage_report)
+        create_comment(
+            service_name=service_name,
+            github_repo=github_repo,
+            github_issue_number=github_issue_number,
+            coverage_report=coverage_report,
+            session=session
+        )
     else:
-        update_comment(service_name, github_repo, github_token, comment_id, coverage_report)
+        update_comment(
+            service_name=service_name,
+            github_repo=github_repo,
+            comment_id=comment_id,
+            coverage_report=coverage_report,
+            session=session)
 
 
 if __name__=="__main__":
-    main(
-        service_name = sys.argv[1],
-        coverage_report = sys.argv[2],
-        github_token = sys.argv[3],
-        github_repo = sys.argv[4],
-        github_issue_number = sys.argv[5]
-    )
+    with github_session(sys.argv[3]) as session:
+        main(
+            service_name=sys.argv[1],
+            coverage_report=sys.argv[2],
+            github_repo=sys.argv[4],
+            github_issue_number=sys.argv[5],
+            session=session
+        )
