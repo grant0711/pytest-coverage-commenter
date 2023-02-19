@@ -51,7 +51,7 @@ class NonExistingCommentGetCommentResponse():
 
 class SuccessPostPatchResponse():
     def __init__(self):
-        self.status_code = 200
+        self.status_code = 201
 
 
 class FailurePostPatchResponse():

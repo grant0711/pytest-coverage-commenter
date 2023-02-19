@@ -82,7 +82,7 @@ def create_comment(service_name, github_repo, github_issue_number, coverage_repo
             "body": titled_coverage_report(service_name, coverage_report)
         })
     )
-    if response.status_code != 200:
+    if response.status_code != 201:
         raise Exception(f"Failed to create comment: {response.json()}; status_code: {response.status_code}")
     return
 
@@ -113,7 +113,7 @@ def update_comment(service_name, github_repo, comment_id, coverage_report, sessi
             "body": titled_coverage_report(service_name, coverage_report)
         })
     )
-    if response.status_code != 200:
+    if response.status_code != 201:
         raise Exception(f"Failed to update comment: {response.json()}; status_code: {response.status_code}")
     return
 
