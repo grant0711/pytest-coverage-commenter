@@ -46,14 +46,14 @@ def get_comment(service_name, github_repo, github_issue_number, session):
     response = session.get(
         url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments"
     )
-    if response.status_code != 200:
-        raise Exception(f"Failed to get comment: {response.json()}; status_code: {response.status_code}")
-    response_json = response.json()
-    for comment in response_json:
-        if comment.get('body', '').startswith('# ' + service_name + ' Coverage Report') and \
-            comment.get('user', {}).get('login') == 'github-actions[bot]':
-            return comment['id']
-    return None
+    if 200 <= response.status_code <= 299:
+        response_json = response.json()
+        for comment in response_json:
+            if comment.get('body', '').startswith('# ' + service_name + ' Coverage Report') and \
+                comment.get('user', {}).get('login') == 'github-actions[bot]':
+                return comment['id']
+        return None
+    raise Exception(f"Failed to get comment: {response.json()}; status_code: {response.status_code}")
 
 
 def create_comment(service_name, github_repo, github_issue_number, coverage_report, session):
@@ -82,9 +82,9 @@ def create_comment(service_name, github_repo, github_issue_number, coverage_repo
             "body": titled_coverage_report(service_name, coverage_report)
         })
     )
-    if response.status_code != 201:
-        raise Exception(f"Failed to create comment: {response.json()}; status_code: {response.status_code}")
-    return
+    if 200 <= response.status_code <= 299:
+        return    
+    raise Exception(f"Failed to create comment: {response.json()}; status_code: {response.status_code}")
 
 
 def update_comment(service_name, github_repo, comment_id, coverage_report, session):
@@ -113,9 +113,9 @@ def update_comment(service_name, github_repo, comment_id, coverage_report, sessi
             "body": titled_coverage_report(service_name, coverage_report)
         })
     )
-    if response.status_code != 201:
-        raise Exception(f"Failed to update comment: {response.json()}; status_code: {response.status_code}")
-    return
+    if 200 <= response.status_code <= 299:
+        return
+    raise Exception(f"Failed to update comment: {response.json()}; status_code: {response.status_code}")
 
 
 def strip_line(v):
