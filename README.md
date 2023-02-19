@@ -27,21 +27,30 @@ The issue number of the pull request. This will default to the current pull requ
 
 If utilizing within a python monorepo, you may create a github action workflow yaml file for each specific service (i.e. directory). At the top of your yaml file, you can specify the specific paths with which to run the coverage commenter.
 
-See the example below for an example github actions yaml file.
+See the example below for an example github actions yaml file. This assumes you have a directory structure as follows:
+
+project
+  .github
+    workflows
+      api.yaml
+      portal.yaml
+  services
+    api
+    portal
 
 
 ```
-name: Name of your Github Action Workflow
+name: API service workflow
 
 on:
   pull_request:
     branches: [ "**" ]
     paths:
-      - "path/to/your/service/**"
+      - "./services/api/**"
   push:
     branches: [ "main" ]
     paths:
-      - "path/to/your/service/**"
+      - "./services/api/**"
 
 jobs:
   build:
@@ -58,7 +67,7 @@ jobs:
     - name: Run coverage commenter
       uses: grant0711/pytest-coverage-commenter@v2
       with:
-        service-name: 'Your Service Name'
+        service-name: 'API'
         coverage-report: ${{ steps.coverage-report.outputs.COVERAGE_REPORT }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
