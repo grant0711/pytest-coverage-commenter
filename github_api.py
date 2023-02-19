@@ -40,7 +40,8 @@ def get_comment(service_name, github_repo, github_token, github_issue_number, se
         response = s.get(
             url=f"https://api.github.com/repos/{github_repo}/issues/{github_issue_number}/comments"
         )
-        print(response.status_code)
+        if response.status_code != 200:
+            raise Exception(f"Failed to get comment: {response.json()}; status_code: {response.status_code}")
         response_json = response.json()
         for comment in response_json:
             if comment.get('body', '').startswith(service_name + ' Coverage Report') and \
@@ -57,9 +58,8 @@ def create_comment(service_name, github_repo, github_token, github_issue_number,
                 "body": service_name + " Coverage Report" + "\n\n" + coverage_report
             })
         )
-        print(response.status_code)
-        response_json = response.json()
-        print(response_json)
+        if response.status_code != 200:
+            raise Exception(f"Failed to create comment: {response.json()}; status_code: {response.status_code}")
     return
 
 def update_comment(service_name, github_repo, github_token, comment_id, coverage_report, session=None):
@@ -71,7 +71,6 @@ def update_comment(service_name, github_repo, github_token, comment_id, coverage
                 "body": service_name + " Coverage Report" + "\n\n" + coverage_report
             })
         )
-        print(response.status_code)
-        response_json = response.json()
-        print(response_json)
+        if response.status_code != 200:
+            raise Exception(f"Failed to update comment: {response.json()}; status_code: {response.status_code}")
     return
