@@ -21,6 +21,7 @@ def main(service_name, coverage_report, github_token, github_repo, github_issue_
 
     # Find existing comment
     comment_id = get_comment(service_name, github_repo, github_token, github_issue_number)
+    print(comment_id)
 
     # If not found, create one
     if not comment_id:

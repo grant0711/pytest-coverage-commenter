@@ -42,10 +42,10 @@ def get_comment(service_name, github_repo, github_token, github_issue_number, se
         )
         response_json = response.json()
         for comment in response_json:
-            if comment.get('body', '').startswith(service_name + ' Coverage Report'):
-                print(comment['user']['login']) # FIXME add additional filter to check that author is github bot
-                return str(comment['id'])
-        return ''
+            if comment.get('body', '').startswith(service_name + ' Coverage Report') and \
+                comment.get('user', {}).get('login') == 'github-actions[bot]':
+                return comment['id']
+        return None
 
 """
 {
