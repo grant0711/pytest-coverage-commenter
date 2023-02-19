@@ -22,7 +22,7 @@ inputs:
     default: ${{ github.event.pull_request.number }}
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'action/Dockerfile'
   args:
     - ${{ inputs.service-name }}
     - ${{ inputs.coverage-report }}
