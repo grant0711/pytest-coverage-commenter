@@ -1,26 +1,18 @@
-# Where to find a comment:
-# GET
-# https://api.github.com/repos/{owner}/{repo}/issues/{pull number}/comments
-# https://api.github.com/repos/grant0711/talk_to_me/issues/1/comments
+"""
+Description: Helper functions to wrap Github API endpoints
 
+Reference:
 
-# Iterate through all pages to find a comment with the body that matches our coverage
-# report, if it doesn't find it then there isn't already a coverage comment
+    List comments for an issue:
+    https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#list-issue-comments
 
-# Update a comment:
+    Update an existing comment:
+    https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#update-an-issue-comment
 
-# PATCH
-# https://api.github.com/repos/{owner}/{repo}/issues/comments/{comment_id}
-# https://api.github.com/repos/grant0711/talk_to_me/issues/comments/1435650589
+    Create a new comment:
+    https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28#create-an-issue-comment
 
-# payload = {"body": "desired new comment body"}
-
-# Create a new comment:
-
-# POST
-# https://api.github.com/repos/{owner}/{repo}/issues/{issue number}/comments
-
-# payload = {"body": "desired new comment body"}
+"""
 import json
 
 import requests
