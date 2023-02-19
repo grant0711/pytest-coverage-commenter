@@ -11,7 +11,7 @@ GITHUB_TOKEN = 'testtoken'
 GITHUB_REPO = 'github_repo'
 GITHUB_ISSUE_NUMBER = '2'
 
-EXPECTED_CR_OUTPUT_NO_TITLE = "**Name    Cover**\ntests/conftest.py    75%\n__init__.py    100%\nmain.py    100%\ntests/__init__.py    100%\ntests/test_main.py    100%\n**TOTAL    89%**"
+EXPECTED_CR_OUTPUT_NO_TITLE = "**Name    Cover**\ntests/conftest.py    75%\n\__init\__.py    100%\nmain.py    100%\ntests/\__init\__.py    100%\ntests/test_main.py    100%\n**TOTAL    89%**"
 EXPECTED_CR_OUTPUT_WITH_TITLE = "# " + SERVICE_NAME + " Coverage Report\n\n" + EXPECTED_CR_OUTPUT_NO_TITLE
 
 

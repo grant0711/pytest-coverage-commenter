@@ -147,6 +147,7 @@ def format_coverage_report(r):
         if concatenated_row.startswith('TOTAL') or \
             concatenated_row == 'Name    Cover':
             concatenated_row = '**' + concatenated_row + '**'
+        concatenated_row = concatenated_row.replace('__', '\__')
         array.append(concatenated_row)
     return '\n'.join(array)
 
