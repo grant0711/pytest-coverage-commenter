@@ -22,5 +22,5 @@ jobs:
     
     - name: Test with pytest
       run: |
-        docker-compose run coverage_comment_test pipenv run pytest
+        docker-compose run coverage_commenter_test pipenv run pytest
     
