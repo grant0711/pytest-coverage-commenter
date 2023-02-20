@@ -10,8 +10,6 @@ RUN apk add --no-cache \
     libffi-dev \
     linux-headers \
     musl-dev 
-#\
-#      postgresql-client
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

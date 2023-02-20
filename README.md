@@ -14,13 +14,19 @@ Name of service that is being tested with coverage. This is utilized within the 
 
 Github token utilized for authentication. You should pass in secrets.GITHUB_TOKEN. This will already be available within your repository secrets.
 
+### `coverage-report`
+
+The string output of a coverage report run. See example below on how to pass in the output of a coverage report run into this action.
+
+## Optional input arguments:
+
 ### `github-repo`
 
-The owner/name of your github repository. This will default to the current repository context, so defining a value for this field is not required.
+The owner/name of your github repository. This will default to the current repository context, so defining a value for this field is not recommended.
 
 ### `github-issue`
 
-The issue number of the pull request. This will default to the current pull request context, so defining a value for this field is not required.
+The issue number of the pull request. This will default to the current pull request context, so defining a value for this field is not recommended.
 
 
 ## An example of how to use this action in a workflow:
@@ -30,14 +36,14 @@ If utilizing within a python monorepo, you may create a github action workflow y
 ### Assuming you have a directory structure as follows:
 
 ```
-project
-  .github
-    workflows
+project/
+  .github/
+    workflows/
       api.yaml
       portal.yaml
-  services
-    api
-    portal
+  services/
+    api/
+    portal/
 ```
 
 ### Here is an example api.yaml file:
@@ -49,11 +55,11 @@ on:
   pull_request:
     branches: [ "**" ]
     paths:
-      - "./services/api/**"
+      - "services/api/**"
   push:
     branches: [ "main" ]
     paths:
-      - "./services/api/**"
+      - "services/api/**"
 
 jobs:
   build:
@@ -75,3 +81,17 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+## Development
+
+Local development is facilitated by utilizing Docker and docker-compose:
+
+```
+docker-compose build coverage_commenter_test
+docker-compose up coverage_commenter_test
+```
+
+When you bring up this container, pytest-watch will run on any changes made within the project directory.
+
+## Contributions
+
+If you happen to find this a useful action, but desire to see it behave differently, please contribute! I created this action with the goal of learning how to create a custom Github Action via Docker and python, and to have something that I can utilize in other personal projects down the line.
