@@ -6,42 +6,60 @@ Pytest-coverage-commenter adds a detailed coverage comment to pull requests. Thi
 
 ## Required input arguments:
 
-## `service-name`
+### `service-name`
 
 Name of service that is being tested with coverage. This is utilized within the comment and utilized on subsequent workflow runs to find and update the existing comment instead of creating a new one. If omitted, will default to an empty string.
 
-## `github-token`
+### `github-token`
 
 Github token utilized for authentication. You should pass in secrets.GITHUB_TOKEN. This will already be available within your repository secrets.
 
-## `github-repo`
+### `coverage-report`
 
-The owner/name of your github repository. This will default to the current repository context, so defining a value for this field is not required.
+The string output of a coverage report run. See example below on how to pass in the output of a coverage report run into this action.
 
-## `github-issue`
+## Optional input arguments:
 
-The issue number of the pull request. This will default to the current pull request context, so defining a value for this field is not required.
+### `github-repo`
+
+The owner/name of your github repository. This will default to the current repository context, so defining a value for this field is not recommended.
+
+### `github-issue`
+
+The issue number of the pull request. This will default to the current pull request context, so defining a value for this field is not recommended.
 
 
 ## An example of how to use this action in a workflow:
 
 If utilizing within a python monorepo, you may create a github action workflow yaml file for each specific service (i.e. directory). At the top of your yaml file, you can specify the specific paths with which to run the coverage commenter.
 
-See the example below for an example github actions yaml file.
-
+### Assuming you have a directory structure as follows:
 
 ```
-name: Name of your Github Action Workflow
+project/
+  .github/
+    workflows/
+      api.yaml
+      portal.yaml
+  services/
+    api/
+    portal/
+```
+
+### Here is an example api.yaml file:
+
+```
+name: API service workflow
 
 on:
   pull_request:
     branches: [ "**" ]
     paths:
-      - "path/to/your/service/**"
+      - "services/api/**"
   push:
     branches: [ "main" ]
     paths:
-      - "path/to/your/service/**"
+      - "services/api/**"
 
 jobs:
   build:
@@ -58,8 +76,22 @@ jobs:
     - name: Run coverage commenter
       uses: grant0711/pytest-coverage-commenter@v2
       with:
-        service-name: 'Your Service Name'
+        service-name: 'API'
         coverage-report: ${{ steps.coverage-report.outputs.COVERAGE_REPORT }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+## Development
+
+Local development is facilitated by utilizing Docker and docker-compose:
+
+```
+docker-compose build coverage_commenter_test
+docker-compose up coverage_commenter_test
+```
+
+When you bring up this container, pytest-watch will run on any changes made within the project directory.
+
+## Contributions
+
+If you happen to find this a useful action, but desire to see it behave differently, please contribute! I created this action with the goal of learning how to create a custom Github Action via Docker and python, and to have something that I can utilize in other personal projects down the line.

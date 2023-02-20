@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+
+  coverage_commenter_test:
+    build: ./
+    command: "pipenv run ptw"
+    volumes:
+      - ./:/app:delegated
+    tty: true
+    stdin_open: true
