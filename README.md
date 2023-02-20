@@ -4,6 +4,9 @@
 
 Pytest-coverage-commenter adds a detailed coverage comment to pull requests. This is intended to provide a quick and easy way to assess test coverage during normal development process without requiring additional manually work.
 
+![Alt text](example_comment.png?raw=true "Example Coverage Comment")
+
+
 ## Required input arguments:
 
 ### `service-name`
