@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import json
+import re
 
 import requests
 
@@ -119,7 +120,8 @@ def update_comment(service_name, github_repo, comment_id, coverage_report, sessi
 
 
 def strip_line(v):
-    return v != '----------------------------------------'
+    pattern = f'^-(-*)-$'
+    return not re.match(pattern, v)
 
 
 def format_coverage_report(r):
@@ -133,6 +135,9 @@ def format_coverage_report(r):
     Outputs:
         - str formatted coverage report with only 'Name' and 'Cover' columns and newlines
     """
+    pattern = r'^Name(.*)TOTAL(.*)%(?P<skipped> [/d+] files skipped due to complete coverage.)?'
+    if re.search(pattern, r):
+        r = re.search(pattern, r).group()
     elements = r.split()
     elements = list(filter(strip_line, elements))
     array = []

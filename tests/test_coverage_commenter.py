@@ -14,6 +14,8 @@ GITHUB_ISSUE_NUMBER = '2'
 EXPECTED_CR_OUTPUT_NO_TITLE = "**Name    Cover**\ntests/conftest.py    75%\n\_\_init\_\_.py    100%\nmain.py    100%\ntests/\_\_init\_\_.py    100%\ntests/test_main.py    100%\n**TOTAL    89%**"
 EXPECTED_CR_OUTPUT_WITH_TITLE = "# " + SERVICE_NAME + " Coverage Report\n\n" + EXPECTED_CR_OUTPUT_NO_TITLE
 
+COVERAGE_REPORT_RAW_B = "Name Stmts Miss Cover ------------------------------------- events/views.py 14 8 43% ------------------------------------- TOTAL 37 8 78% 5 files skipped due to complete coverage."
+EXPECTED_CR_OUTPUT_NO_TITLE_B = "**Name    Cover**\nevents/views.py    43%\n**TOTAL    78%**"
 
 def test_github_session():
     with main.github_session(GITHUB_TOKEN) as session:
@@ -139,6 +141,9 @@ def test_format_coverage_report():
 def test_titled_coverage_report():
     assert main.titled_coverage_report(SERVICE_NAME, EXPECTED_CR_OUTPUT_NO_TITLE) == EXPECTED_CR_OUTPUT_WITH_TITLE
 
+
+def test_format_coverage_report_with_skipped_files():
+    assert main.format_coverage_report(COVERAGE_REPORT_RAW_B) == EXPECTED_CR_OUTPUT_NO_TITLE_B
 
 def test_main_creates_new_comment():
     mock_session = Mock()
