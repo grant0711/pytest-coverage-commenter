@@ -98,3 +98,8 @@ When you bring up this container, pytest-watch will run on any changes made with
 ## Contributions
 
 If you happen to find this a useful action, but desire to see it behave differently, please contribute! I created this action with the goal of learning how to create a custom Github Action via Docker and python, and to have something that I can utilize in other personal projects down the line.
+
+## TODOs
+
+- Format coverage comment in a table within comment body: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
+- Calculate total coverage independently of the coverage report, as the total is misleading if --skip-empty or --skip-covered are set to true when generating a coverage report
