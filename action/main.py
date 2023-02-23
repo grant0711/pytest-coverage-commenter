@@ -162,8 +162,7 @@ def titled_coverage_report(service_name, coverage_report):
 
 
 def main(service_name, coverage_report, github_repo, github_issue_number, session):
-    print(f"github_issue_number={github_issue_number}")
-    if github_issue_number == '0':
+    if not github_issue_number:
         return
     coverage_report = format_coverage_report(coverage_report)
     comment_id = get_comment(
